@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.superfloat.app.service.BubbleFloatingService
-import com.superfloat.app.ui.theme.SuperFloatTheme
+import com.superfloat.app.ui.theme.NoteFloatTheme
 
 class MainActivity : ComponentActivity() {
     
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         
         setContent {
-            SuperFloatTheme {
+            NoteFloatTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -112,7 +112,7 @@ fun MainScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "SuperFloat",
+            text = "NoteFloat",
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary
         )

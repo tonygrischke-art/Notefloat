@@ -1,4 +1,4 @@
-# SuperFloat - Floating Notepad App
+# NoteFloat - Floating Notepad App
 
 A persistent floating notepad widget for Android—type notes over any app, drag it around, stays open even when you switch screens or leave the app. No digging for notes, just quick jots.
 

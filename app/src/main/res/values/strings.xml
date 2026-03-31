@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SuperFloat</string>
-    <string name="notification_channel_name">SuperFloat Service</string>
+    <string name="app_name">NoteFloat</string>
+    <string name="notification_channel_name">NoteFloat Service</string>
     <string name="notification_channel_desc">Floating widget service notification</string>
     <string name="start_basic_widget">Start Basic Widget</string>
     <string name="start_bubble_widget">Start Bubble Widget</string>

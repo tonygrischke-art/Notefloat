@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "SuperFloat"
+rootProject.name = "NoteFloat"
 include(":app")

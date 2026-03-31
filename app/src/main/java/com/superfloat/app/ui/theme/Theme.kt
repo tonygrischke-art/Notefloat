@@ -28,7 +28,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun SuperFloatTheme(
+fun NoteFloatTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit

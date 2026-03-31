@@ -28,7 +28,7 @@ import kotlin.math.abs
 class BubbleFloatingService : Service() {
 
     companion object {
-        const val CHANNEL_ID = "SuperFloatChannel"
+        const val CHANNEL_ID = "NoteFloatChannel"
         const val NOTIFICATION_ID = 1
         
         private var bubbleView: View? = null
@@ -65,7 +65,7 @@ class BubbleFloatingService : Service() {
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "SuperFloat Service",
+            "NoteFloat Service",
             NotificationManager.IMPORTANCE_LOW
         ).apply {
             description = "Floating notepad service"
@@ -83,7 +83,7 @@ class BubbleFloatingService : Service() {
         )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("SuperFloat")
+            .setContentTitle("NoteFloat")
             .setContentText("Tap to open notepad")
             .setSmallIcon(android.R.drawable.ic_menu_edit)
             .setContentIntent(pendingIntent)
@@ -232,14 +232,14 @@ class BubbleFloatingService : Service() {
     }
 
     private fun saveNote(text: String) {
-        getSharedPreferences("SuperFloatPrefs", Context.MODE_PRIVATE)
+        getSharedPreferences("NoteFloatPrefs", Context.MODE_PRIVATE)
             .edit()
             .putString("saved_note", text)
             .apply()
     }
 
     private fun loadNote(): String {
-        return getSharedPreferences("SuperFloatPrefs", Context.MODE_PRIVATE)
+        return getSharedPreferences("NoteFloatPrefs", Context.MODE_PRIVATE)
             .getString("saved_note", "") ?: ""
     }
 

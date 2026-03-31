@@ -1,4 +1,4 @@
-package com.superfloat.app
+package com.notefloat.app
 
 import android.Manifest
 import android.content.Intent
@@ -19,8 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.superfloat.app.service.BubbleFloatingService
-import com.superfloat.app.ui.theme.NoteFloatTheme
+import com.notefloat.app.service.BubbleFloatingService
+import com.notefloat.app.ui.theme.NoteFloatTheme
 
 class MainActivity : ComponentActivity() {
     

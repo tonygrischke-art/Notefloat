@@ -1,4 +1,4 @@
-package com.superfloat.app.service
+package com.notefloat.app.service
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -20,9 +20,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
-import com.superfloat.app.MainActivity
-import com.superfloat.app.R
-import com.superfloat.app.ui.theme.Pink80
+import com.notefloat.app.MainActivity
+import com.notefloat.app.R
+import com.notefloat.app.ui.theme.Pink80
 import kotlin.math.abs
 
 class BubbleFloatingService : Service() {

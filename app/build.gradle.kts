@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.superfloat.app"
+    namespace = "com.notefloat.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.superfloat.app"
+        applicationId = "com.notefloat.app"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -18,6 +18,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {

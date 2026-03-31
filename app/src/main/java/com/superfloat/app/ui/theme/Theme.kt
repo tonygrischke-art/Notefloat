@@ -1,4 +1,4 @@
-package com.superfloat.app.ui.theme
+package com.notefloat.app.ui.theme
 
 import android.app.Activity
 import android.os.Build

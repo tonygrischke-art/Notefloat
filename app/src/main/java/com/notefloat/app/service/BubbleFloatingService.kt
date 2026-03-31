@@ -9,20 +9,18 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
-import android.os.Build
 import android.os.IBinder
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import com.notefloat.app.MainActivity
 import com.notefloat.app.R
-import com.notefloat.app.ui.theme.Pink80
 import kotlin.math.abs
 
 class BubbleFloatingService : Service() {
@@ -161,10 +159,12 @@ class BubbleFloatingService : Service() {
         
         isExpanded = true
         
+        currentNoteText = loadNote()
+        
         val inflater = LayoutInflater.from(this)
         expandedView = inflater.inflate(R.layout.layout_notepad, null)
         
-        val editText = expandedView?.findViewById<android.widget.EditText>(R.id.editNote)
+        val editText = expandedView?.findViewById<EditText>(R.id.editNote)
         val wordCount = expandedView?.findViewById<TextView>(R.id.tvWordCount)
         val charCount = expandedView?.findViewById<TextView>(R.id.tvCharCount)
         val btnClear = expandedView?.findViewById<ImageButton>(R.id.btnClear)

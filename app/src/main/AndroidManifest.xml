@@ -27,15 +27,6 @@
         </activity>
 
         <service
-            android:name=".service.BasicFloatingWidgetService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="floating_widget" />
-        </service>
-
-        <service
             android:name=".service.BubbleFloatingService"
             android:exported="false"
             android:foregroundServiceType="specialUse">

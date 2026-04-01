@@ -19,26 +19,19 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Download and setup Android SDK
+    - name: Setup Android SDK
+      uses: android-actions/setup-android-sdk@v1
+      
+    - name: Create local.properties
+      run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+        
+    - name: Download Gradle Wrapper JAR
       run: |
-        sudo apt-get update
-        sudo apt-get install -y wget unzip
-        mkdir -p $HOME/android-sdk/cmdline-tools
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
-        unzip -q /tmp/cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
-        mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-        
-        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
-        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" --channel=0
-        
         mkdir -p gradle/wrapper
         wget -q https://raw.githubusercontent.com/gradle/gradle/v8.2.0/gradle/wrapper/gradle-wrapper.jar -O gradle/wrapper/gradle-wrapper.jar
-        
         chmod +x gradlew
 
     - name: Build with Gradle
-      env:
-        ANDROID_HOME: $HOME/android-sdk
       run: ./gradlew assembleDebug
     
     - name: Upload APK

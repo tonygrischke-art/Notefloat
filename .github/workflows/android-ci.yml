@@ -19,7 +19,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android SDK
+    - name: Download and setup Android SDK
       run: |
         sudo apt-get update
         sudo apt-get install -y wget unzip
@@ -28,25 +28,17 @@ jobs:
         unzip -q /tmp/cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
         
-    - name: Set environment variables
-      run: |
-        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-        echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-
-    - name: Accept licenses and install SDK components
-      run: |
         yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" --channel=0
-
-    - name: Download Gradle Wrapper JAR
-      run: |
+        
         mkdir -p gradle/wrapper
         wget -q https://raw.githubusercontent.com/gradle/gradle/v8.2.0/gradle/wrapper/gradle-wrapper.jar -O gradle/wrapper/gradle-wrapper.jar
+        
+        chmod +x gradlew
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    
     - name: Build with Gradle
+      env:
+        ANDROID_HOME: $HOME/android-sdk
       run: ./gradlew assembleDebug
     
     - name: Upload APK

@@ -12,7 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
-import android.widget.CardView
+import androidx.cardview.widget.CardView
 import com.notefloat.app.R
 import com.notefloat.app.data.Note
 import com.notefloat.app.data.NoteRepository

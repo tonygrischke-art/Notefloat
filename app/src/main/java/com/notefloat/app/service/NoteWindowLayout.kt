@@ -12,12 +12,14 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import android.widget.CardView
 import com.notefloat.app.R
 import com.notefloat.app.data.Note
 import com.notefloat.app.data.NoteRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 class NoteWindowLayout(
     context: Context,

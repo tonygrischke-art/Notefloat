@@ -7,9 +7,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,18 +19,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.notefloat.app.service.BubbleFloatingService
+import com.notefloat.app.service.NoteFloatService
 import com.notefloat.app.ui.theme.NoteFloatTheme
 
 class MainActivity : ComponentActivity() {
-    
+
     companion object {
         const val NOTIFICATION_PERMISSION_CODE = 1001
     }
 
+    private val overlayPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { }
+
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         setContent {
             NoteFloatTheme {
                 Surface(
@@ -38,10 +46,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen(
+                        hasOverlayPermission = Settings.canDrawOverlays(this),
                         onRequestPermission = { requestOverlayPermission() },
-                        onStartBubble = { startBubbleService() },
-                        onStopBubble = { stopBubbleService() },
-                        hasOverlayPermission = Settings.canDrawOverlays(this)
+                        onStartService = { startService() },
+                        onStopService = { stopService() }
                     )
                 }
             }
@@ -53,28 +61,7 @@ class MainActivity : ComponentActivity() {
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             Uri.parse("package:$packageName")
         )
-        startActivityForResult(intent, 100)
-    }
-
-    private fun startBubbleService() {
-        if (!Settings.canDrawOverlays(this)) {
-            requestOverlayPermission()
-            return
-        }
-        
-        requestNotificationPermission()
-        
-        val intent = Intent(this, BubbleFloatingService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
-        }
-    }
-
-    private fun stopBubbleService() {
-        val intent = Intent(this, BubbleFloatingService::class.java)
-        stopService(intent)
+        overlayPermissionLauncher.launch(intent)
     }
 
     private fun requestNotificationPermission() {
@@ -84,26 +71,34 @@ class MainActivity : ComponentActivity() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    NOTIFICATION_PERMISSION_CODE
-                )
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+    }
+
+    private fun startService() {
+        if (!Settings.canDrawOverlays(this)) {
+            requestOverlayPermission()
+            return
+        }
+        requestNotificationPermission()
+        NoteFloatService.start(this)
+        finish()
+    }
+
+    private fun stopService() {
+        NoteFloatService.stop(this)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    hasOverlayPermission: Boolean,
     onRequestPermission: () -> Unit,
-    onStartBubble: () -> Unit,
-    onStopBubble: () -> Unit,
-    hasOverlayPermission: Boolean
+    onStartService: () -> Unit,
+    onStopService: () -> Unit
 ) {
-    val context = LocalContext.current
-    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -116,17 +111,17 @@ fun MainScreen(
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Text(
-            text = "Floating Notepad",
+            text = "Floating Notes",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        
+
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         if (!hasOverlayPermission) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -156,24 +151,24 @@ fun MainScreen(
             }
         } else {
             Button(
-                onClick = onStartBubble,
+                onClick = onStartService,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Start Floating Notepad")
+                Text("Start Floating Notes")
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             OutlinedButton(
-                onClick = onStopBubble,
+                onClick = onStopService,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Stop Floating Notepad")
+                Text("Stop Service")
             }
         }
-        
+
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -185,11 +180,13 @@ fun MainScreen(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("• Draggable bubble with word count badge")
-                Text("• Tap to expand to notepad")
-                Text("• Auto-saves notes")
-                Text("• Light/Dark theme support")
-                Text("• Persists across app switches")
+                Text("• Multiple floating notes")
+                Text("• Drag notes anywhere")
+                Text("• 10 color options (tap menu)")
+                Text("• 8 icon options (long-press menu)")
+                Text("• Auto-save notes")
+                Text("• Auto-start on boot")
+                Text("• Light/Dark theme")
             }
         }
     }
